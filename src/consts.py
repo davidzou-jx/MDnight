@@ -6,6 +6,9 @@ COMMIT_STR = "MDnight"
 
 DEFAULT_MODEL = "qwen27b"
 WEIGHTS_BASE_PATH = "/Users/davidzjx/.cache/huggingface/hub/"
+SERVER_CONFIGS = {
+    "port": "9931",
+}
 MODEL_CONFIGS = {
     "qwen27b":{
         "weights": WEIGHTS_BASE_PATH+"models--ISTA-DASLab--Qwen3.8-27B-GSQ-RCO-GGUF/snapshots/d562806dbafae37109975e970aae91b43e73b440/Qwen3.8-27B-GSQ-RCO-IQ3_S.gguf",

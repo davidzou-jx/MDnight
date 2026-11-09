@@ -6,6 +6,9 @@ global server
 
 def construct_command(model=DEFAULT_MODEL):
     cmd = ["llama", "serve"]
+    for opt in SERVER_CONFIGS:
+        cmd.append("--" + opt)
+        cmd.append(SERVER_CONFIGS[opt])
     for opt in MODEL_CONFIGS[model]["llama_options"]:
         cmd.append("--" + opt)
         cmd.append(MODEL_CONFIGS[model]["llama_options"][opt])
