@@ -34,6 +34,7 @@ def process():
     for vault in VAULTS:
         new = process_vault(vault)
         write_back(vault, new)
+        make_commit(vault, COMMIT_STR+" edits done")
     end_server()
 
 

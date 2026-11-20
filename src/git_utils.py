@@ -25,3 +25,8 @@ def get_text(vault):
         with open(vault+file) as f:
             text[file] = f.read()
     return text
+
+def make_commit(vault, message):
+    repo = Repo(vault)
+    repo.git.add("-A")
+    commit = repo.commit(message)
