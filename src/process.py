@@ -29,11 +29,16 @@ def process_vault(vault, model="qwen9b"):
         # no need for context reset, llama is stateless and manages memory itself
     return new
 
-
 def process():
     if not TESTING: start_server()
-    edited = {}
     for vault in VAULTS:
-        edited[vault] = process_vault(vault)
+        new = process_vault(vault)
+        write_back(vault, new)
     end_server()
-    # TODO: something for writing back into vaults
+
+
+def write_back(vault, new):
+    if vault[len(vault)-1] is not "/": vault = vault + "/"
+    for file in new:
+        with open(vault+file, "w") as f:
+            f.write(new[file])
