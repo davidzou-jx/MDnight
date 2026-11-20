@@ -1,4 +1,5 @@
 import os
+from datetime import datetime as dt
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -23,20 +24,21 @@ def get_edited(text=None):
 
 def process_vault(vault, model="qwen9b"):
     old = get_text(vault)
-    new = {}
+    if vault[len(vault) - 1] is not "/": vault = vault + "/"
+    # dont move before or else it breaks git diff
+    make_commit(vault, COMMIT_STR + " before edits at " + dt.now().strftime("%Y-%m-%d"))
     for file in old:
-        new[file] = get_edited(old[file])
+        new = get_edited(old[file])
+        with open(vault+file, "w") as f:
+            f.write(new[file])
         # no need for context reset, llama is stateless and manages memory itself
-    return new
+    make_commit(vault, COMMIT_STR + " after edits at " + dt.now().strftime("%Y-%m-%d"))
 
 def process():
     if not TESTING: start_server()
     for vault in VAULTS:
-        new = process_vault(vault)
-        write_back(vault, new)
-        make_commit(vault, COMMIT_STR+" edits done")
+        process_vault(vault)
     end_server()
-
 
 def write_back(vault, new):
     if vault[len(vault)-1] is not "/": vault = vault + "/"
