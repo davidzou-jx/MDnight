@@ -1,6 +1,7 @@
 from git import Repo
 from consts import *
 
+
 # gets list of add/mod files since last run
 def changed_files(vault):
     repo = Repo(vault)
@@ -11,20 +12,24 @@ def changed_files(vault):
             latest = commit
             break
     if latest is None: print("No commit found, manually create one containing" + COMMIT_STR)
-    diffs =  latest.diff(None, diff_filter="AM") # compares last run with current state
+    diffs = latest.diff(None, diff_filter="AM")  # compares last run with current state
     out = []
-    for diff in diffs: out.append(diff.b_path)
+    for diff in diffs:
+        if ".md" in diff.b_path:
+            out.append(diff.b_path)
     return out
+
 
 # gets a dict of file paths mapped to the text content
 def get_text(vault):
-    if vault[len(vault)-1] is not "/": vault = vault + "/"
+    if vault[len(vault) - 1] is not "/": vault = vault + "/"
     files = changed_files(vault)
     text = {}
     for file in files:
-        with open(vault+file) as f:
+        with open(vault + file) as f:
             text[file] = f.read()
     return text
+
 
 def make_commit(vault, message):
     repo = Repo(vault)
