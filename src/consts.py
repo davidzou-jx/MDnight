@@ -52,9 +52,14 @@ MODEL_CONFIGS = {
     }
 }
 
-PROMPT = """This is a note written in Obsidian-flavored markdown. Assume all relevant markdown features are available.
+PROMPT = """You will be a note written in Obsidian-flavored markdown.
 It is written quickly, and is likely full of abbreviations, shorthands, and grammar, and structural mistakes.
-Your task is to edit this text to be more pleasant to read.
+Your task is to edit this text to be more pleasant to read. Assume all relevant markdown features are available.
+
+You **should not**:
+- Make factual corrections to any apparently incorrect information
+- Add or remove content or knowledge from the note
+- Make any edits to header text, other than spelling, capitalization, or punctuation
 
 You **should**:
 - Capitalize appropriately. This should be done all over the note, even if otherwise instructed to retain the original
@@ -63,16 +68,16 @@ You **should**:
     - "tday" should become "today"
     - "u" should become "you"
     - Keep "etc.", "et al.", or "nov" as they are
-- Fix grammar and capitalization mistakes. However, do not expand sentence fragments into full sentences
+- Fix grammar and capitalization mistakes in the note
+    - Do not expand sentence fragments into full sentences
     - Insert apostrophes into "howd", "youre", "didnt", etc.
     - Reword sentences to be grammatically correct.
         - Keep the text to a similar length and structure, but fix grammatical mistakes if they make reading awkward
 - Correct typos and spelling mistakes. Do not correct anything with a capital letter, as it is likely a name or specific term
 - Update the document structure. If certain sections obviously belong under another, edit the heading to conform to the hierarchy
+- Only output the edited text, outside of the reasoning block
+- Make a note on any ambiguous edits or anything to note in a callout block at the end of the edited note
+    - A callout is a block quote with [!info] and a title ("Editor's Note") on the first line, and regular block quoted text after
     
-You **should not**:
-- Make factual corrections to any apparently incorrect information
-- Add or remove content or knowledge from the note
- 
-Outside the reasoning block, the output should only contain the edited text.
-"""
+These rules are guidelines. Use judgement on what a user would want to see in an edited text. Follow the spirit and not letter of these rules.
+Outside the reasoning block, the output should only contain the edited text."""
