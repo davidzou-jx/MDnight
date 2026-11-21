@@ -19,7 +19,7 @@ def get_edited(text=None):
     response = client.chat.completions.create(model=model, messages=[
         {"role": "system", "content": PROMPT},
         {"role": "user", "content": text}])
-    return str(response.choices[0].message.content)
+    return str(response.choices[0].message.content) # TODO: make sure this doesn't include reasoning
 
 
 def process_vault(vault, model="qwen9b"):

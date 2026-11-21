@@ -9,7 +9,7 @@ TEST_ENDPOINT = gem[1]
 TEST_KEY_NAME = "GEMINI_KEY"
 
 MAIN_BRANCH = "main"
-VAULTS = ["/Users/davidzjx/Documents/Purdue Vault"]
+VAULTS = ["/Users/davidzjx/Documents/Purdue Vault/"] # preferably with trailing slash
 COMMIT_STR = "MDnight"
 
 SERVER_PORT = 9931
@@ -52,6 +52,27 @@ MODEL_CONFIGS = {
     }
 }
 
-PROMPT = """
-fix this pls monsieur 千问 ty ily
+PROMPT = """This is a note written in Obsidian-flavored markdown. Assume all relevant markdown features are available.
+It is written quickly, and is likely full of abbreviations, shorthands, and grammar, and structural mistakes.
+Your task is to edit this text to be more pleasant to read.
+
+You **should**:
+- Capitalize appropriately. This should be done all over the note, even if otherwise instructed to retain the original
+- Expand obvious shorthands and abbreviations, unless they are commonly used in abbreviate form, or there is no obvious replacement. For example:
+    - "bc" should become"because"
+    - "tday" should become "today"
+    - "u" should become "you"
+    - Keep "etc.", "et al.", or "nov" as they are
+- Fix grammar and capitalization mistakes. However, do not expand sentence fragments into full sentences
+    - Insert apostrophes into "howd", "youre", "didnt", etc.
+    - Reword sentences to be grammatically correct.
+        - Keep the text to a similar length and structure, but fix grammatical mistakes if they make reading awkward
+- Correct typos and spelling mistakes. Do not correct anything with a capital letter, as it is likely a name or specific term
+- Update the document structure. If certain sections obviously belong under another, edit the heading to conform to the hierarchy
+    
+You **should not**:
+- Make factual corrections to any apparently incorrect information
+- Add or remove content or knowledge from the note
+ 
+Outside the reasoning block, the output should only contain the edited text.
 """
