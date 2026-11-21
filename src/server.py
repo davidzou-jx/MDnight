@@ -22,4 +22,5 @@ def start_server(model=DEFAULT_MODEL):
 
 
 def end_server():
+    global server
     server.terminate()

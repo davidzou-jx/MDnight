@@ -3,7 +3,7 @@ oai = ("gpt-6-luna", "https://api.openai.com/v1/responses")
 ds = ("deepseek-flash", "https://api.deepseek.com")
 gem = ("gemini-3.5-flash-lite", "https://generativelanguage.googleapis.com")  # gemini-3.8-flash
 
-TESTING = True
+CLOUD_TESTING = False
 TEST_MODEL = gem[0]
 TEST_ENDPOINT = gem[1]
 TEST_KEY_NAME = "GEMINI_KEY"
@@ -16,6 +16,7 @@ SERVER_PORT = 9931
 
 DEFAULT_MODEL = "qwen27b"
 WEIGHTS_BASE_PATH = "/Users/davidzjx/.cache/huggingface/hub/"
+# note for configs, use full option names (the ones with --)
 SERVER_CONFIGS = {
     "port": str(SERVER_PORT)
 }

@@ -11,7 +11,7 @@ def changed_files(vault):
         if COMMIT_STR in str(commit.message):
             latest = commit
             break
-    if latest is None: print("No commit found, manually create one containing" + COMMIT_STR)
+    if latest is None: print("No commit found, manually create one containing " + COMMIT_STR)
     diffs = latest.diff(None, diff_filter="AM")  # compares last run with current state
     out = []
     for diff in diffs:
@@ -34,4 +34,4 @@ def get_text(vault):
 def make_commit(vault, message):
     repo = Repo(vault)
     repo.git.add("-A")
-    commit = repo.commit(message)
+    repo.commit(message)
