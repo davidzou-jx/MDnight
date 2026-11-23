@@ -41,6 +41,11 @@ def process():
         process_vault(vault)
     end_server()
 
+def process_indiv(vault: str, model="qwen9b"):
+    if not CLOUD_TESTING: start_server()
+    process_vault(vault)
+    end_server()
+
 
 def write_back(vault, new):
     if vault[len(vault) - 1] is not "/": vault = vault + "/"

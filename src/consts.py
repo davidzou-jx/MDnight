@@ -9,7 +9,7 @@ TEST_ENDPOINT = gem[1]
 TEST_KEY_NAME = "GEMINI_KEY"
 
 MAIN_BRANCH = "main"
-VAULTS = ["/Users/davidzjx/Documents/Purdue Vault/"] # preferably with trailing slash
+VAULTS = ["test_vault/"] # preferably with trailing slash
 COMMIT_STR = "MDnight"
 
 SERVER_PORT = 9931
@@ -28,7 +28,7 @@ MODEL_CONFIGS = {
             "parallel": "1",
             "flash-attn": "on",
             "cache-type-k": "q8_0",
-            "cache-type-v": "q8_0",
+            "cache-type-v": "q8_0"
         }
     },
     "qwen9b": {
@@ -38,7 +38,7 @@ MODEL_CONFIGS = {
             "parallel": "1",
             "flash-attn": "on",
             "cache-type-k": "q8_0",
-            "cache-type-v": "q8_0",
+            "cache-type-v": "q8_0"
         }
     },
     "qwen2b": {
@@ -48,7 +48,7 @@ MODEL_CONFIGS = {
             "parallel": "1",
             "flash-attn": "on",
             "cache-type-k": "q8_0",
-            "cache-type-v": "q8_0",
+            "cache-type-v": "q8_0"
         }
     }
 }
@@ -81,4 +81,10 @@ You **should**:
     - A callout is a block quote with [!info] and a title ("Editor's Note") on the first line, and regular block quoted text after
     
 These rules are guidelines. Use judgement on what a user would want to see in an edited text. Follow the spirit and not letter of these rules.
-Outside the reasoning block, the output should only contain the edited text."""
+Outside the reasoning block, the output should only contain the edited text.
+
+The note begins after the divider
+
+---
+
+"""
