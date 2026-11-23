@@ -4,8 +4,10 @@ from consts import *
 global server
 
 
-def construct_command(model=DEFAULT_MODEL):
+def construct_command(model: str):
     cmd = ["llama", "serve"]
+    cmd.append("-m")
+    cmd.append(MODEL_CONFIGS[model]["weights"])
     for opt in SERVER_CONFIGS:
         cmd.append("--" + opt)
         cmd.append(SERVER_CONFIGS[opt])
@@ -15,7 +17,7 @@ def construct_command(model=DEFAULT_MODEL):
     return cmd
 
 
-def start_server(model=DEFAULT_MODEL):
+def start_server(model: str):
     cmd = construct_command(model)
     global server
     server = subprocess.Popen(cmd)

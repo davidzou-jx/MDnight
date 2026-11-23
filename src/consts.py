@@ -1,7 +1,7 @@
 # for quick changes
-oai = ("gpt-6-luna", "https://api.openai.com/v1/responses")
+oai = ("gpt-6-luna", "https://api.openai.com/v1")
 ds = ("deepseek-flash", "https://api.deepseek.com")
-gem = ("gemini-3.5-flash-lite", "https://generativelanguage.googleapis.com")  # gemini-3.8-flash
+gem = ("gemini-3.5-flash-lite", "https://generativelanguage.googleapis.com/v1beta/openai")  # or gemini-3.8-flash
 
 CLOUD_TESTING = False
 TEST_MODEL = gem[0]
@@ -14,7 +14,7 @@ COMMIT_STR = "MDnight"
 
 SERVER_PORT = 9931
 
-DEFAULT_MODEL = "qwen27b"
+DEFAULT_MODEL = "qwen9b"
 WEIGHTS_BASE_PATH = "/Users/davidzjx/.cache/huggingface/hub/"
 # note for configs, use full option names (the ones with --)
 SERVER_CONFIGS = {

@@ -9,41 +9,43 @@ from server import *
 from git_utils import *
 
 
-def get_edited(text=None):
+def get_edited(text: str, model: str):
     if text is None: return None
 
     if CLOUD_TESTING: load_dotenv()
     client = OpenAI(base_url=f"http://localhost:{SERVER_PORT}/v1" if not CLOUD_TESTING else TEST_ENDPOINT,
-                    api_key="" if not CLOUD_TESTING else os.getenv(TEST_KEY_NAME))
-    model = client.models[0] if not CLOUD_TESTING else TEST_MODEL
+                    api_key="unnecessary" if not CLOUD_TESTING else os.getenv(TEST_KEY_NAME))
+    model = model if not CLOUD_TESTING else TEST_MODEL
     response = client.chat.completions.create(model=model, messages=[
         {"role": "system", "content": PROMPT},
         {"role": "user", "content": text}])
     return str(response.choices[0].message.content)  # reasoning already in diff field
 
 
-def process_vault(vault, model="qwen9b"):
+def process_vault(vault, model: str):
+    changed = changed_files(vault);
     old = get_text(vault)
     if vault[len(vault) - 1] is not "/": vault = vault + "/"
     # dont move before or else it breaks git diff
-    make_commit(vault, COMMIT_STR + " before edits at " + dt.now().strftime("%Y-%m-%d"))
+    make_commit(vault, COMMIT_STR + ": before edits at " + dt.now().strftime("%Y-%m-%d"), changed)
     for file in old:
-        new = get_edited(old[file])
+        new = get_edited(old[file], model)
         with open(vault + file, "w") as f:
-            f.write(new[file])
+            f.write(new)
         # no need for context reset, llama is stateless and manages memory itself
-    make_commit(vault, COMMIT_STR + " after edits at " + dt.now().strftime("%Y-%m-%d"))
+    make_commit(vault, COMMIT_STR + ": after edits at " + dt.now().strftime("%Y-%m-%d"), changed)
 
 
-def process():
-    if not CLOUD_TESTING: start_server()
+def process_all(model: str):
+    if not CLOUD_TESTING: start_server(model)
     for vault in VAULTS:
-        process_vault(vault)
+        process_vault(vault, model)
     end_server()
 
-def process_indiv(vault: str, model="qwen9b"):
-    if not CLOUD_TESTING: start_server()
-    process_vault(vault)
+
+def process_indiv(vault: str, model: str):
+    if not CLOUD_TESTING: start_server(model)
+    process_vault(vault, model)
     end_server()
 
 

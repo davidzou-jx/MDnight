@@ -12,10 +12,10 @@ def changed_files(vault):
             latest = commit
             break
     if latest is None: print("No commit found, manually create one containing " + COMMIT_STR)
-    diffs = latest.diff(None, diff_filter="AM")  # compares last run with current state
+    diffs = latest.diff(None, diff_filter="AMR")  # compares last run with current state
     out = []
     for diff in diffs:
-        if ".md" in diff.b_path:
+        if diff.b_path.endswith(".md"):
             out.append(diff.b_path)
     return out
 
@@ -31,7 +31,8 @@ def get_text(vault):
     return text
 
 
-def make_commit(vault, message):
+def make_commit(vault: str, message: str, files: list):
     repo = Repo(vault)
-    repo.git.add("-A")
-    repo.commit(message)
+    for file in changed_files(vault):
+        repo.index.add(file)
+    repo.index.commit(message)
