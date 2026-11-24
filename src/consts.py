@@ -11,6 +11,7 @@ TEST_KEY_NAME = "GEMINI_KEY"
 MAIN_BRANCH = "main"
 VAULTS = ["test_vault/"] # preferably with trailing slash
 COMMIT_STR = "MDnight"
+REVIEW_FILE = "notes.json"
 
 SERVER_PORT = 9931
 
