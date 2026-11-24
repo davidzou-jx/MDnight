@@ -10,7 +10,6 @@ TEST_ENDPOINT = gem[1]
 TEST_KEY_NAME = "GEMINI_KEY"
 
 MAIN_BRANCH = "main"
-VAULTS = ["test_vault/"] # preferably with trailing slash
 COMMIT_STR = "MDnight"
 
 SERVER_PORT = 9931
@@ -21,6 +20,9 @@ WEIGHTS_BASE_PATH = "/Users/davidzjx/.cache/huggingface/hub/"
 SERVER_CONFIGS = {
     "port": str(SERVER_PORT)
 }
+
+with open("models.yaml", "r") as f:
+    VAULTS = yaml.safe_load(f.read())
 with open("models.yaml", "r") as f:
     MODEL_CONFIGS = yaml.safe_load(f.read())
 with open("sysprompt.txt", "r") as f:
