@@ -78,7 +78,7 @@ You **should**:
 - Update the document structure. If certain sections obviously belong under another, edit the heading to conform to the hierarchy
 - Only output the edited text, outside of the reasoning block
 - Make a note on any ambiguous edits or anything to note in a callout block at the end of the edited note
-    - A callout is a block quote with [!info] and a title ("Editor's Note") on the first line, and regular block quoted text after
+    - A callout is a block quote with [!caution] Editor's Notes" on the first line, and regular block quoted text after
     
 These rules are guidelines. Use judgement on what a user would want to see in an edited text. Follow the spirit and not letter of these rules.
 Outside the reasoning block, the output should only contain the edited text.

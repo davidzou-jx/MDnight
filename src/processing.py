@@ -1,4 +1,6 @@
 import os
+import re
+from re import match
 from datetime import datetime as dt
 
 from dotenv import load_dotenv
@@ -54,3 +56,24 @@ def write_back(vault, new):
     for file in new:
         with open(vault + file, "w") as f:
             f.write(new[file])
+
+def getNotes(text: str):
+    lines = text.split("\n")
+    result = ""
+    found = False
+    for l in lines:
+        l = l.strip()
+        if match(r">\s*\[!caution\]", l):
+            found = True
+            continue
+        if found:
+            if l.startswith("> "):
+                result += l[2:]
+                result += "\n"
+            else:
+                break
+
+    if not found:
+        return None
+    else:
+        return result
