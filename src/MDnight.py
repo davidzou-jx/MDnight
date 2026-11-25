@@ -1,12 +1,12 @@
-import json
+from sys import path
 
+import json
+import yaml
 import typer
 from consts import *
 import processing as p
 
 app = typer.Typer()
-
-# TODO: more options
 
 @app.command()
 def process_all(model: str = typer.Option(DEFAULT_MODEL, "--model", "-m")) -> None:
@@ -31,6 +31,22 @@ def review(vault: str) -> None:
         print(r + ": ")
     print("\t" + reviews[r])
 
+
+@app.command()
+def list_models() -> None:
+    for model in MODEL_CONFIGS:
+        print(f"{model}: {MODEL_CONFIGS[model]["llama-options"]["ctx-size"]}tk context")
+
+@app.command()
+def list_vaults() -> None:
+    for v in VAULTS:
+        print(f"{v}: {VAULTS[v]}")
+
+@app.command()
+def add_vault(name: str, path: str) -> None:
+    VAULTS[name] = path
+    with open("vaults.yaml", "w") as f:
+        f.write(yaml.dump(VAULTS))
 
 # TODO: add review command, change prompt to more parsable and make a list for latest edit
 
