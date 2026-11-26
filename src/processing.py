@@ -3,6 +3,7 @@ import os
 import re
 from re import match
 from datetime import datetime as dt
+from pathlib import Path
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -25,20 +26,19 @@ def get_edited(text: str, model: str):
     return str(response.choices[0].message.content)  # reasoning already in diff field
 
 
-def process_vault(vault: str, model: str):
+def process_vault(vault: Path, model: str):
     changed = changed_files(vault)
     old = get_text(vault)
-    if vault[len(vault) - 1] is not "/": vault = vault + "/"
     # dont move before or else it breaks git diff
     make_commit(vault, COMMIT_STR + ": before edits at " + dt.now().strftime("%Y-%m-%d"), changed)
     reviews = {}
     for file in old:
         new = get_edited(old[file], model)
-        with open(vault + file, "w") as f:
+        with open(vault / file, "w") as f:
             f.write(new)
         # no need for context reset, llama is stateless and manages memory itself
         reviews = populate_review(file, new, reviews)
-    with open(vault + REVIEW_FILE, "w") as f:
+    with open(vault / REVIEW_FILE, "w") as f:
         json.dump(reviews, f)
     make_commit(vault, COMMIT_STR + ": after edits at " + dt.now().strftime("%Y-%m-%d"), changed)
 
@@ -47,27 +47,20 @@ def process_all(model: str):
     if not CLOUD_TESTING: start_server(model)
     for vault in VAULTS:
         process_vault(VAULTS[vault], model)
-    end_server()
+    if not CLOUD_TESTING: end_server()
 
 
-def process_indiv(vault: str, model: str):
+def process_indiv(vault: Path, model: str):
     if not CLOUD_TESTING: start_server(model)
     process_vault(vault, model)
-    end_server()
-
-
-def write_back(vault:str, new: dict):
-    if vault[len(vault) - 1] is not "/": vault = vault + "/"
-    for file in new:
-        with open(vault + file, "w") as f:
-            f.write(new[file])
+    if not CLOUD_TESTING: end_server()
 
 def get_notes(text: str):
     lines = text.split("\n")
     result = ""
     found = False
     for l in lines:
-        if match(r">\s*\[!caution\]", l):
+        if match(r">\s*\[!caution]", l):
             found = True
             continue
         if found:
@@ -75,13 +68,12 @@ def get_notes(text: str):
                 result += l[2:]
             else:
                 break
-
     if not found:
         return None
     else:
         return result
 
-def populate_review(file:str, text: str, reviews: dict):
+def populate_review(file: Path, text: str, reviews: dict):
     n = get_notes(text)
     if n is not None:
         reviews[file] = n

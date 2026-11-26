@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 from sys import path
 
 import json
@@ -12,22 +13,22 @@ app = typer.Typer()
 @app.command()
 def process_all(model: str = typer.Option(DEFAULT_MODEL, "--model", "-m")) -> None:
     if model not in MODEL_CONFIGS:
-        print(model+" is not a configured model. Use another one.")
+        print(model+" is not a configured model. Use another one or add it in models.yaml.")
         sys.exit(1)
     p.process_all(model)
 
 @app.command()
 def process(vault: str, model: str = typer.Option(DEFAULT_MODEL, "--model", "-m")) -> None:
     if model not in MODEL_CONFIGS:
-        print(model+" is not a configured model. Use another one.")
+        print(model+" is not a configured model. Use another one or add it in models.yaml.")
         sys.exit(1)
-    p.process_indiv(vault, model)
+    p.process_indiv(Path(vault), model)
 
 @app.command()
 def review(vault: str) -> None:
-    if vault[len(vault) - 1] is not "/": vault = vault + "/"
-    print("Vault: " + vault + "\n")
-    with open(vault + REVIEW_FILE, "r") as f:
+    vault = Path(vault)
+    print("Vault: " + str(vault) + "\n")
+    with open(vault / REVIEW_FILE, "r") as f:
         reviews = json.load(f)
     for r in reviews:
         print(r + ": ")
@@ -42,13 +43,16 @@ def list_models() -> None:
 @app.command()
 def list_vaults() -> None:
     for v in VAULTS:
-        print(f"{v}: {VAULTS[v]}")
+        print(f"{v}: {str(VAULTS[v])}")
 
 @app.command()
 def add_vault(name: str, path: str) -> None:
-    VAULTS[name] = path
-    with open("vaults.yaml", "w") as f:
-        f.write(yaml.dump(VAULTS))
+    VAULTS[name] = Path(path)
+    temp = {}
+    for v in VAULTS:
+        temp[v] = str(VAULTS[v])
+    with open(VAULTS_FILE, "w") as f:
+        f.write(yaml.dump(temp))
 
 # TODO: add review command, change prompt to more parsable and make a list for latest edit
 
