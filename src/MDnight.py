@@ -1,3 +1,4 @@
+import sys
 from sys import path
 
 import json
@@ -12,24 +13,25 @@ app = typer.Typer()
 def process_all(model: str = typer.Option(DEFAULT_MODEL, "--model", "-m")) -> None:
     if model not in MODEL_CONFIGS:
         print(model+" is not a configured model. Use another one.")
-        return
+        sys.exit(1)
     p.process_all(model)
 
 @app.command()
 def process(vault: str, model: str = typer.Option(DEFAULT_MODEL, "--model", "-m")) -> None:
     if model not in MODEL_CONFIGS:
         print(model+" is not a configured model. Use another one.")
-        return
+        sys.exit(1)
     p.process_indiv(vault, model)
 
 @app.command()
 def review(vault: str) -> None:
+    if vault[len(vault) - 1] is not "/": vault = vault + "/"
     print("Vault: " + vault + "\n")
     with open(vault + REVIEW_FILE, "r") as f:
         reviews = json.load(f)
     for r in reviews:
         print(r + ": ")
-    print("\t" + reviews[r])
+        print("\t" + reviews[r])
 
 
 @app.command()

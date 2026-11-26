@@ -1,3 +1,4 @@
+import yaml
 # for quick changes
 oai = ("gpt-6-luna", "https://api.openai.com/v1")
 ds = ("deepseek-flash", "https://api.deepseek.com")
@@ -20,9 +21,9 @@ WEIGHTS_BASE_PATH = "/Users/davidzjx/.cache/huggingface/hub/"
 SERVER_CONFIGS = {
     "port": str(SERVER_PORT)
 }
-with open("models.yaml", "r") as f:
+with open("src/vaults.yaml", "r") as f:
     VAULTS = yaml.safe_load(f.read())
-with open("models.yaml", "r") as f:
+with open("src/models.yaml", "r") as f:
     MODEL_CONFIGS = yaml.safe_load(f.read())
-with open("sysprompt.txt", "r") as f:
+with open("src/sysprompt.txt", "r") as f:
     PROMPT = f.read()

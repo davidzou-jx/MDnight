@@ -11,9 +11,9 @@ def construct_command(model: str):
     for opt in SERVER_CONFIGS:
         cmd.append("--" + opt)
         cmd.append(SERVER_CONFIGS[opt])
-    for opt in MODEL_CONFIGS[model]["llama_options"]:
+    for opt in MODEL_CONFIGS[model]["llama-options"]:
         cmd.append("--" + opt)
-        cmd.append(MODEL_CONFIGS[model]["llama_options"][opt])
+        cmd.append(MODEL_CONFIGS[model]["llama-options"][opt])
     return cmd
 
 

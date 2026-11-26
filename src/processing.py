@@ -37,7 +37,7 @@ def process_vault(vault: str, model: str):
         with open(vault + file, "w") as f:
             f.write(new)
         # no need for context reset, llama is stateless and manages memory itself
-        reviews = populate_review(vault, file, new, reviews)
+        reviews = populate_review(file, new, reviews)
     with open(vault + REVIEW_FILE, "w") as f:
         json.dump(reviews, f)
     make_commit(vault, COMMIT_STR + ": after edits at " + dt.now().strftime("%Y-%m-%d"), changed)
@@ -46,7 +46,7 @@ def process_vault(vault: str, model: str):
 def process_all(model: str):
     if not CLOUD_TESTING: start_server(model)
     for vault in VAULTS:
-        process_vault(vault, model)
+        process_vault(VAULTS[vault], model)
     end_server()
 
 
@@ -81,7 +81,7 @@ def get_notes(text: str):
     else:
         return result
 
-def populate_review(vault:str, file:str, text: str, reviews: dict):
+def populate_review(file:str, text: str, reviews: dict):
     n = get_notes(text)
     if n is not None:
         reviews[file] = n
