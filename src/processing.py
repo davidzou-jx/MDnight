@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from operator import truediv
 from re import match
 from datetime import datetime as dt
 from pathlib import Path
@@ -13,7 +14,7 @@ from server import *
 from git_utils import *
 
 
-def get_edited(text: str, model: str) -> str:
+def get_edited(text: str, model: str):
     if text is None: return None
 
     if CLOUD_TESTING: load_dotenv()
@@ -26,13 +27,17 @@ def get_edited(text: str, model: str) -> str:
     return str(response.choices[0].message.content)  # reasoning already in diff field
 
 
-def process_vault(vault: Path, model: str):
+def process_vault(vault: str, model: str):
+    vname = vault
+    vault = Path(VAULTS[vault]["path"])
     changed = changed_files(vault)
     old = get_text(vault)
     # dont move before or else it breaks git diff
     make_commit(vault, COMMIT_STR + ": before edits at " + dt.now().strftime("%Y-%m-%d"), changed)
     reviews = {}
     for file in old:
+        if file_excluded(vname, file):
+            continue
         new = get_edited(old[file], model)
         with open(vault / file, "w") as f:
             f.write(new)
@@ -46,16 +51,16 @@ def process_vault(vault: Path, model: str):
 def process_all(model: str):
     if not CLOUD_TESTING: start_server(model)
     for vault in VAULTS:
-        process_vault(VAULTS[vault], model)
+        process_vault(VAULTS[vault]["path"], model)
     if not CLOUD_TESTING: end_server()
 
 
-def process_indiv(vault: Path, model: str):
+def process_indiv(vault: str, model: str):
     if not CLOUD_TESTING: start_server(model)
     process_vault(vault, model)
     if not CLOUD_TESTING: end_server()
 
-def get_notes(text: str) -> str | None:
+def get_notes(text: str):
     lines = text.split("\n")
     result = ""
     found = False
@@ -78,3 +83,12 @@ def populate_review(file: str, text: str, reviews: dict) -> dict[str, str]:
     if n is not None:
         reviews[file] = n
     return reviews
+
+def file_excluded(vault: str, file: str):
+    if "exclude" in VAULTS[vault]:
+        exclusions = VAULTS[vault]["exclude"]
+        for e in exclusions:
+            if Path(file).is_relative_to(Path(e)):
+                return True
+    return False
+

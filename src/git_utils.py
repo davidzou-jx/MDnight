@@ -17,8 +17,9 @@ def changed_files(vault: Path) -> list[str]:
     diffs = latest.diff(None, diff_filter="AMR")  # compares last run with current state
     out = []
     for diff in diffs:
-        if diff.b_path.endswith(".md"):
-            out.append(diff.b_path)
+        p = diff.b_path
+        if p.endswith(".md"):
+            out.append(p)
     return out
 
 
