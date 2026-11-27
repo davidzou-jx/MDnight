@@ -32,7 +32,7 @@ SERVER_CONFIGS = {
 with open(VAULTS_FILE, "r") as f:
     temp = yaml.safe_load(f.read())
     for v in temp:
-        VAULTS[v] = Path(temp[v])
+        VAULTS[v]["path"] = Path(temp[v])
 with open(MODELS_FILE, "r") as f:
     MODEL_CONFIGS = yaml.safe_load(f.read())
 with open(PROMPT_FILE, "r") as f:

@@ -1,1 +1,4 @@
-test: "/Users/davidzjx/Documents/Projects/MDnight/test_vault"
+test:
+  path: "/Users/davidzjx/Documents/Projects/MDnight/test_vault"
+  exclude:
+    - "excluded"

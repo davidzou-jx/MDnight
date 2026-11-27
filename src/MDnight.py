@@ -43,14 +43,14 @@ def list_models() -> None:
 @app.command()
 def list_vaults() -> None:
     for v in VAULTS:
-        print(f"{v}: {str(VAULTS[v])}")
+        print(f"{v}: {str(VAULTS[v]["path"])}")
 
 @app.command()
 def add_vault(name: str, path: str) -> None:
-    VAULTS[name] = Path(path)
+    VAULTS[name]["path"] = Path(path)
     temp = {}
     for v in VAULTS:
-        temp[v] = str(VAULTS[v])
+        temp[v] = str(VAULTS[v]["path"])
     with open(VAULTS_FILE, "w") as f:
         f.write(yaml.dump(temp))
 

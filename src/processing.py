@@ -46,7 +46,7 @@ def process_vault(vault: Path, model: str):
 def process_all(model: str):
     if not CLOUD_TESTING: start_server(model)
     for vault in VAULTS:
-        process_vault(VAULTS[vault], model)
+        process_vault(VAULTS[vault]["path"], model)
     if not CLOUD_TESTING: end_server()
 
 
