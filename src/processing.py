@@ -13,7 +13,7 @@ from server import *
 from git_utils import *
 
 
-def get_edited(text: str, model: str):
+def get_edited(text: str, model: str) -> str:
     if text is None: return None
 
     if CLOUD_TESTING: load_dotenv()
@@ -55,7 +55,7 @@ def process_indiv(vault: Path, model: str):
     process_vault(vault, model)
     if not CLOUD_TESTING: end_server()
 
-def get_notes(text: str):
+def get_notes(text: str) -> str | None:
     lines = text.split("\n")
     result = ""
     found = False
@@ -73,7 +73,7 @@ def get_notes(text: str):
     else:
         return result
 
-def populate_review(file: Path, text: str, reviews: dict):
+def populate_review(file: str, text: str, reviews: dict) -> dict[str, str]:
     n = get_notes(text)
     if n is not None:
         reviews[file] = n

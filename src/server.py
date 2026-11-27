@@ -4,7 +4,7 @@ from consts import *
 global server
 
 
-def construct_command(model: str):
+def construct_command(model: str) -> list[str]:
     cmd = ["llama", "serve"]
     cmd.append("-m")
     cmd.append(MODEL_CONFIGS[model]["weights"])

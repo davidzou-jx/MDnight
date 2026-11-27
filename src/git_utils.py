@@ -5,7 +5,7 @@ from consts import *
 
 
 # gets list of add/mod files since last run
-def changed_files(vault: Path):
+def changed_files(vault: Path) -> list[str]:
     repo = Repo(vault)
     commits = repo.iter_commits(MAIN_GIT_BRANCH)
     latest = None
@@ -23,7 +23,7 @@ def changed_files(vault: Path):
 
 
 # gets a dict of file paths mapped to the text content
-def get_text(vault: Path):
+def get_text(vault: Path) -> dict[str, str]:
     files = changed_files(vault)
     text = {}
     for file in files:
@@ -32,7 +32,7 @@ def get_text(vault: Path):
     return text
 
 
-def make_commit(vault: Path, message: str, files: list):
+def make_commit(vault: Path, message: str, files: list) -> None:
     repo = Repo(vault)
     for file in files:
         repo.index.add(file)
