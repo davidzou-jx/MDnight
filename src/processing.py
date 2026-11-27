@@ -85,9 +85,10 @@ def populate_review(file: str, text: str, reviews: dict):
     return reviews
 
 def file_excluded(vault: str, file: str):
-    exclusions = VAULTS[vault]["exclude"]
-    for e in exclusions:
-        if Path(file).is_relative_to(Path(e)):
-            return True
+    if "exclude" in VAULTS[vault]:
+        exclusions = VAULTS[vault]["exclude"]
+        for e in exclusions:
+            if Path(file).is_relative_to(Path(e)):
+                return True
     return False
 

@@ -50,7 +50,9 @@ def add_vault(name: str, path: str) -> None:
     VAULTS[name]["path"] = Path(path)
     temp = {}
     for v in VAULTS:
-        temp[v] = str(VAULTS[v]["path"])
+        temp[v]["path"] = str(VAULTS[v]["path"])
+        if "exclude" in VAULTS[v]:
+            temp[v]["exclude"] = VAULTS[v]["exclude"]
     with open(VAULTS_FILE, "w") as f:
         f.write(yaml.dump(temp))
 
