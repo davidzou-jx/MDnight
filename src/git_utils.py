@@ -1,6 +1,5 @@
-from pathlib import Path
-
 from git import Repo
+
 from consts import *
 
 

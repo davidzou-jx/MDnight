@@ -1,17 +1,13 @@
 import json
 import os
-import re
-from operator import truediv
-from re import match
 from datetime import datetime as dt
-from pathlib import Path
+from re import match
 
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from consts import *
-from server import *
 from git_utils import *
+from server import *
 
 
 def get_edited(text: str, model: str):
@@ -60,6 +56,7 @@ def process_indiv(vault: str, model: str):
     process_vault(vault, model)
     if not CLOUD_TESTING: end_server()
 
+
 def get_notes(text: str):
     lines = text.split("\n")
     result = ""
@@ -78,11 +75,13 @@ def get_notes(text: str):
     else:
         return result
 
+
 def populate_review(file: str, text: str, reviews: dict) -> dict[str, str]:
     n = get_notes(text)
     if n is not None:
         reviews[file] = n
     return reviews
+
 
 def file_excluded(vault: str, file: str):
     if "exclude" in VAULTS[vault]:
@@ -91,4 +90,3 @@ def file_excluded(vault: str, file: str):
             if Path(file).is_relative_to(Path(e)):
                 return True
     return False
-

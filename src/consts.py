@@ -1,5 +1,7 @@
-import yaml
 from pathlib import Path
+
+import yaml
+
 # for quick changes
 oai = ("gpt-6-luna", "https://api.openai.com/v1")
 ds = ("deepseek-flash", "https://api.deepseek.com")
@@ -10,7 +12,6 @@ TEST_MODEL = gem[0]
 TEST_ENDPOINT = gem[1]
 TEST_KEY_NAME = "GEMINI_KEY"
 
-
 MAIN_GIT_BRANCH = "main"
 COMMIT_STR = "MDnight"
 VAULTS = {}
@@ -18,7 +19,7 @@ VAULTS = {}
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 VAULTS_FILE = PROJECT_DIR / "src" / "vaults.yaml"
 MODELS_FILE = PROJECT_DIR / "src" / "models.yaml"
-PROMPT_FILE = PROJECT_DIR / "src"/ "sysprompt.txt"
+PROMPT_FILE = PROJECT_DIR / "src" / "sysprompt.txt"
 REVIEW_FILE = "notes.json"
 
 SERVER_PORT = 9931
