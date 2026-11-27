@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from operator import truediv
 from re import match
 from datetime import datetime as dt
 from pathlib import Path
@@ -26,13 +27,17 @@ def get_edited(text: str, model: str):
     return str(response.choices[0].message.content)  # reasoning already in diff field
 
 
-def process_vault(vault: Path, model: str):
+def process_vault(vault: str, model: str):
+    vname = vault
+    vault = Path(VAULTS[vault]["path"])
     changed = changed_files(vault)
     old = get_text(vault)
     # dont move before or else it breaks git diff
     make_commit(vault, COMMIT_STR + ": before edits at " + dt.now().strftime("%Y-%m-%d"), changed)
     reviews = {}
     for file in old:
+        if file_excluded(vname, file):
+            continue
         new = get_edited(old[file], model)
         with open(vault / file, "w") as f:
             f.write(new)
@@ -50,7 +55,7 @@ def process_all(model: str):
     if not CLOUD_TESTING: end_server()
 
 
-def process_indiv(vault: Path, model: str):
+def process_indiv(vault: str, model: str):
     if not CLOUD_TESTING: start_server(model)
     process_vault(vault, model)
     if not CLOUD_TESTING: end_server()
@@ -73,8 +78,16 @@ def get_notes(text: str):
     else:
         return result
 
-def populate_review(file: Path, text: str, reviews: dict):
+def populate_review(file: str, text: str, reviews: dict):
     n = get_notes(text)
     if n is not None:
         reviews[file] = n
     return reviews
+
+def file_excluded(vault: str, file: str):
+    exclusions = VAULTS[vault]["exclude"]
+    for e in exclusions:
+        if Path(file).is_relative_to(Path(e)):
+            return True
+    return False
+
